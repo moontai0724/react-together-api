@@ -1,0 +1,67 @@
+{
+  "name": "collab-flickr-api",
+  "private": true,
+  "version": "0.0.0-pre",
+  "description": "A backend service for collaborative flickr",
+  "author": "moontai0724",
+  "license": "MIT",
+  "homepage": "https://moontai0724.github.io/collab-flickr-api",
+  "bugs": {
+    "url": "https://github.com/moontai0724/collab-flickr-api/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moontai0724/collab-flickr-api.git"
+  },
+  "keywords": [
+    "package",
+    "template"
+  ],
+  "files": [
+    "build",
+    "dist"
+  ],
+  "main": "./dist/index.umd.js",
+  "scripts": {
+    "build": "npm run build:clean && npm run build:ts && npm run build:bundle && npm run docs",
+    "build:clean": "rm -rf dist build docs",
+    "build:ts": "tsc -b src/tsconfig.build.json",
+    "build:bundle": "vite build",
+    "docs": "typedoc --plugin typedoc-plugin-missing-exports src/index.ts",
+    "test": "vitest",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint --cache-location node_modules/.cache/eslint .",
+    "lint:prettier": "prettier --check --ignore-unknown .",
+    "prepare": "husky || true"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^10.0.3",
+    "@types/node": "^20.12.5",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitest/coverage-v8": "^1.4.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-simple-import-sort": "^12.0.0",
+    "eslint-plugin-typescript-sort-keys": "^3.2.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "3.2.5",
+    "semantic-release": "^23.0.7",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.4",
+    "vitest": "^1.4.0"
+  },
+  "lint-staged": {
+    "*.{ts,js}": "eslint --cache --cache-location node_modules/.cache/eslint",
+    "*.**": "prettier --check --ignore-unknown"
+  }
+}
