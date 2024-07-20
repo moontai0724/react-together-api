@@ -1,21 +1,23 @@
 {
-  "name": "collab-flickr-api",
+  "name": "react-together-api",
   "private": true,
   "version": "0.0.0-pre",
-  "description": "A backend service for collaborative flickr",
+  "description": "A backend service for a MVP system to collab with others for flickr albums by give reactions to photo",
   "author": "moontai0724",
   "license": "MIT",
-  "homepage": "https://moontai0724.github.io/collab-flickr-api",
+  "homepage": "https://moontai0724.github.io/react-together-api",
   "bugs": {
-    "url": "https://github.com/moontai0724/collab-flickr-api/issues"
+    "url": "https://github.com/moontai0724/react-together-api/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/moontai0724/collab-flickr-api.git"
+    "url": "https://github.com/moontai0724/react-together-api.git"
   },
   "keywords": [
-    "package",
-    "template"
+    "flickr",
+    "reaction",
+    "collaboration",
+    "albums"
   ],
   "files": [
     "build",
