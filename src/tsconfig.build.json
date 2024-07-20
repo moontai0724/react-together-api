@@ -2,7 +2,7 @@
   "extends": ".",
   "compilerOptions": {
     "noEmit": false,
-    "declaration": true,
+    "declaration": false,
     "rootDir": ".",
     "baseUrl": ".",
     "outDir": "../build"
