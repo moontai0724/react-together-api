@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
-    "baseUrl": "src",
+    "target": "ESNext",
+    "module": "ESNext",
+    "baseUrl": "build",
     "moduleResolution": "Node",
     "noEmit": true,
     "resolveJsonModule": true,
@@ -16,5 +17,9 @@
   },
   "typeAcquisition": {
     "enable": true
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true,
+    "verbose": false
   }
 }
