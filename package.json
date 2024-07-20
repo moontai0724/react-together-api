@@ -1,6 +1,7 @@
 {
   "name": "react-together-api",
   "private": true,
+  "type": "module",
   "version": "0.0.0-pre",
   "description": "A backend service for a MVP system to collab with others for flickr albums by give reactions to photo",
   "author": "moontai0724",
