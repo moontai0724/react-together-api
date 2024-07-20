@@ -3,6 +3,7 @@
   "compilerOptions": {
     "noEmit": false,
     "declaration": false,
+    "module": "commonjs",
     "rootDir": ".",
     "baseUrl": ".",
     "outDir": "../build"
