@@ -8,11 +8,21 @@
       "name": "tsx",
       "type": "node",
       "request": "launch",
-      "args": ["tsx", "watch", "${file}"],
+      "args": ["-y", "tsx", "watch", "${file}"],
       "runtimeExecutable": "npx",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**"]
+    },
+    {
+      "name": "test",
+      "request": "launch",
+      "runtimeArgs": ["test", "${file}"],
+      "runtimeExecutable": "yarn",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
     }
   ]
 }

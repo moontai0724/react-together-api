@@ -1,16 +1,11 @@
 import Fastify from "fastify";
 
-const fastify = Fastify({
-  logger: true,
-});
+import type { FastifyOptions } from "./types/fastify";
 
-fastify.get("/", (request, reply) => {
-  reply.send({ ping: "pong" });
-});
+export function buildApp(options: FastifyOptions = {}) {
+  const app = Fastify(options as never);
 
-fastify.listen({ port: 3000, host: "0.0.0.0" }, (err) => {
-  if (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-});
+  app.get("/", async () => ({ ping: "pong" }));
+
+  return app;
+}
