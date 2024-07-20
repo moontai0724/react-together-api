@@ -72,6 +72,7 @@
     "*.**": "prettier --check --ignore-unknown"
   },
   "dependencies": {
+    "@fastify/autoload": "^5.10.0",
     "dotenv-cli": "^7.4.2",
     "fastify": "^4.28.1"
   }
