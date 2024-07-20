@@ -23,4 +23,4 @@ COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 
 EXPOSE 3000
 
-CMD ["node", "build/server.js"]
+CMD ["npm", "start"]

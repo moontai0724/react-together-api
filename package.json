@@ -25,10 +25,11 @@
   ],
   "main": "./build/server.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "dotenv -- tsx watch src/server.ts",
     "build": "npm run build:clean && npm run build:ts && npm run docs",
     "build:clean": "rm -rf build docs",
     "build:ts": "tsc -b src/tsconfig.build.json",
+    "start": "dotenv -- node build/server.js",
     "docs": "echo 'TODO: docs'",
     "test": "vitest",
     "lint": "npm run lint:eslint && npm run lint:prettier",
@@ -69,6 +70,7 @@
     "*.**": "prettier --check --ignore-unknown"
   },
   "dependencies": {
+    "dotenv-cli": "^7.4.2",
     "fastify": "^4.28.1"
   }
 }
