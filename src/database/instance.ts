@@ -1,4 +1,4 @@
-import { Kysely, MysqlDialect } from "kysely";
+import { CamelCasePlugin, Kysely, MysqlDialect } from "kysely";
 import { createPool, type PoolOptions } from "mysql2";
 
 import { env } from "../config";
@@ -27,4 +27,7 @@ const dialect = new MysqlDialect({
   }),
 });
 
-export const db = new Kysely<Database>({ dialect });
+export const db = new Kysely<Database>({
+  dialect,
+  plugins: [new CamelCasePlugin()],
+});
