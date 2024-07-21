@@ -8,8 +8,8 @@
       "name": "tsx",
       "type": "node",
       "request": "launch",
-      "args": ["-y", "tsx", "watch", "${file}"],
-      "runtimeExecutable": "npx",
+      "args": ["run", "tsx", "--watch", "${file}"],
+      "runtimeExecutable": "npm",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**"]
