@@ -10,6 +10,14 @@
 pnpm install
 ```
 
+### Migrate Database
+
+Use Kysely's CLI to migrate the database.
+
+```bash
+npx kysely migrate:latest
+```
+
 ## API Document
 
 See the [API documentation](https://moontai0724.github.io/react-together-api/).
