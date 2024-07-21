@@ -26,7 +26,7 @@
   ],
   "main": "./build/server.js",
   "scripts": {
-    "dev": "dotenv -- tsx watch src/server.ts",
+    "dev": "dotenv -- tsx watch --tsconfig src/tsconfig.json src/server.ts",
     "build": "npm run build:clean && npm run build:ts && npm run docs",
     "build:clean": "rm -rf build docs",
     "build:ts": "tsc -b src/tsconfig.build.json && tsc-alias -p tsconfig.json",

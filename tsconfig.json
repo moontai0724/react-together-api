@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "baseUrl": "build",
+    "baseUrl": "src",
     "moduleResolution": "Node",
     "noEmit": true,
     "resolveJsonModule": true,
