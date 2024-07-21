@@ -1,4 +1,3 @@
-/* eslint-disable typescript-sort-keys/interface */
 import type { ColumnType, Insertable, Selectable, Updateable } from "kysely";
 
 export interface FlickrPhotoTable {

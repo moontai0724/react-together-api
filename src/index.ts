@@ -2,8 +2,7 @@ import { resolve } from "node:path";
 
 import fastifyAutoload from "@fastify/autoload";
 import Fastify from "fastify";
-
-import type { FastifyOptions } from "./types/fastify";
+import type { FastifyOptions } from "types/fastify";
 
 export function buildApp(options: FastifyOptions = {}) {
   const app = Fastify(options as never);

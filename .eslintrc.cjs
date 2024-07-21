@@ -43,6 +43,7 @@ module.exports = {
     "import/no-duplicates": "error",
     "import/no-unresolved": "error",
     "import/prefer-default-export": "off",
+    "typescript-sort-keys/interface": "off",
 
     // additional rules
     "@typescript-eslint/consistent-type-exports": "error",
@@ -67,11 +68,6 @@ module.exports = {
         prev: ["const", "let", "var"],
         next: ["const", "let", "var"],
       },
-    ],
-
-    "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      { allowExpressions: true },
     ],
 
     "@typescript-eslint/interface-name-prefix": "off",
