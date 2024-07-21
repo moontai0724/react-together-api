@@ -6,7 +6,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .createTable("flickr_photos")
     // Flickr photo ID
-    .addColumn("id", "bigint", (col) => col.primaryKey())
+    .addColumn("id", "bigint", (col) => col.primaryKey().unsigned())
     // Flickr photo page
     .addColumn("url", "varchar(100)", (col) => col.notNull())
     // Photo taken time from Flickr
