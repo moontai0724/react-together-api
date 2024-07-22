@@ -1,6 +1,6 @@
 import type { SwaggerOptions } from "@fastify/swagger";
 
-import { version } from "../../package.json";
+import packageJson from "../../package.json" with { type: "json" };
 
 export const openapiOptions: SwaggerOptions = {
   openapi: {
@@ -9,7 +9,7 @@ export const openapiOptions: SwaggerOptions = {
       title: "React Together API",
       description:
         "A backend service for a MVP system to collab with others for flickr albums by give reactions to photo",
-      version,
+      version: packageJson.version,
     },
   },
 };
