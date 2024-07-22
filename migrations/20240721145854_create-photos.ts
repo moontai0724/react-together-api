@@ -23,7 +23,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
       ["category_id"],
       "categories",
       ["id"],
-      (col) => col.onUpdate("cascade").onDelete("cascade"),
+      (col) => col.onUpdate("cascade").onDelete("set null"),
     )
     .addColumn("photographer_id", "bigint", (col) => col.unsigned())
     .addForeignKeyConstraint(

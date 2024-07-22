@@ -5,3 +5,7 @@ export const database = {
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_DATABASE || "react-together",
 };
+
+export const file = {
+  root: process.env.FILE_ROOT || "./photos",
+};
