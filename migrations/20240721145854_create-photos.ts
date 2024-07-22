@@ -31,7 +31,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
       ["photographer_id"],
       "photographers",
       ["id"],
-      (col) => col.onUpdate("cascade").onDelete("cascade"),
+      (col) => col.onUpdate("cascade").onDelete("set null"),
     )
     .addColumn("file_name", "varchar(300)", (col) => col.notNull())
     .addUniqueConstraint("photos_file_path_unique", [
