@@ -26,8 +26,8 @@
   ],
   "main": "./build/server.js",
   "scripts": {
-    "tsx": "dotenv -- tsx --tsconfig src/tsconfig.json",
-    "dev": "npm run tsx --watch src/server.ts",
+    "tsx": "dotenv -- tsx watch --tsconfig src/tsconfig.json",
+    "dev": "npm run tsx src/server.ts",
     "build": "npm run build:clean && npm run build:ts && npm run docs",
     "build:clean": "rm -rf build docs",
     "build:ts": "tsc -b src/tsconfig.build.json && tsc-alias -p tsconfig.json",
@@ -41,6 +41,8 @@
   },
   "dependencies": {
     "@fastify/autoload": "^5.10.0",
+    "@fastify/swagger": "^8.14.0",
+    "@fastify/swagger-ui": "^4.0.1",
     "@sinclair/typebox": "^0.32.34",
     "dotenv-cli": "^7.4.2",
     "fastify": "^4.28.1",

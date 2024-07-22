@@ -1,8 +1,24 @@
-import type { FastifyPluginCallback } from "fastify";
-import { healthCheckHandler } from "modules/health-check";
+import { Type } from "@sinclair/typebox";
+import type {
+  FastifyPluginCallback,
+  FastifySchema,
+  RouteHandler,
+} from "fastify";
 
-const handler: FastifyPluginCallback = async (instance) => {
-  instance.get("/", healthCheckHandler);
+const schema: FastifySchema = {
+  summary: "Health check",
+  description: "Health check",
+  response: {
+    200: Type.Object({
+      ping: Type.Literal("pong"),
+    }),
+  },
 };
 
-export default handler;
+const healthCheckHandler: RouteHandler = async () => ({ ping: "pong" });
+
+const router: FastifyPluginCallback = async (instance) => {
+  instance.get("/", { schema }, healthCheckHandler);
+};
+
+export default router;
