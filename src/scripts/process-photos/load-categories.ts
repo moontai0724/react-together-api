@@ -1,4 +1,4 @@
-import { deleteNotIn, getIn, insertIfNotExists } from "modules/category";
+import { categoryService } from "modules/category";
 
 import { photosRootPath } from "./common";
 import { getFolders } from "./get-folders";
@@ -6,7 +6,7 @@ import { getFolders } from "./get-folders";
 async function createCategories(categories: string[]) {
   return Promise.all(
     categories.map(async (category) => {
-      const categoryId = await insertIfNotExists(category);
+      const categoryId = await categoryService.insertIfNotExists(category);
 
       console.log(`[Category] (${categoryId}) "${category}"`);
 
@@ -22,8 +22,8 @@ async function createCategories(categories: string[]) {
 export async function loadCategories() {
   const categories = await getFolders(photosRootPath);
   const categoriesIds = await createCategories(categories);
-  const createdCategories = await getIn(categoriesIds);
-  const deleted = await deleteNotIn(categoriesIds);
+  const createdCategories = await categoryService.getIn(categoriesIds);
+  const deleted = await categoryService.deleteNotIn(categoriesIds);
 
   if (deleted.numDeletedRows)
     console.log(
