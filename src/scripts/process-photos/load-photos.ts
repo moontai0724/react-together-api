@@ -1,25 +1,55 @@
-import { createHash } from "node:crypto";
+import { type BinaryLike, createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import type { Category, Photographer } from "database";
+import { photoService } from "modules/photo";
 
 import { photosRootPath } from "./common";
 import { getFiles } from "./get-files";
 import { handlePhoto, type WaitingPhoto } from "./photo-queue";
 
-async function loadPhoto(photo: WaitingPhoto) {
-  const { category, photographer, fileName } = photo;
+async function readPhoto(info: WaitingPhoto) {
+  const { category, photographer, fileName } = info;
   const filePath = resolve(
     photosRootPath,
     category.label,
     photographer.name,
     fileName,
   );
-  const fileBuffer = await readFile(filePath);
-  const filehash = createHash("sha256").update(fileBuffer).digest("hex");
 
-  console.log(`[File] (${filehash.length}: ${filehash}) "${fileName}"`);
+  return readFile(filePath);
+}
+
+/**
+ * @returns 64 characters hex string
+ */
+function calculateHash(data: BinaryLike): string {
+  return createHash("sha256").update(data).digest("hex");
+}
+
+async function loadPhoto(info: WaitingPhoto) {
+  const fileBuffer = await readPhoto(info);
+  const integrity = calculateHash(fileBuffer);
+
+  const updatedByIntegrity = await photoService.updatePathByIntegrity({
+    integrity,
+    categoryId: info.category.id,
+    photographerId: info.photographer.id,
+    fileName: info.fileName,
+  });
+
+  if (updatedByIntegrity) return updatedByIntegrity;
+
+  return photoService
+    .upsertByPath({
+      categoryId: info.category.id,
+      photographerId: info.photographer.id,
+      fileName: info.fileName,
+      integrity,
+      file: { buffer: fileBuffer },
+    })
+    .catch((err) => console.error("Failed to upsert photo", err));
 }
 
 /**

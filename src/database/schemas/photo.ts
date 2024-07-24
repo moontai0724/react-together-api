@@ -10,19 +10,19 @@ export interface PhotoTable {
   /**
    * Auto-incremented serial id for photo in this system
    */
-  id: Generated<number>;
+  id: Generated<bigint>;
   /**
    * Flickr photo ID, reference to flickr_photos.id
    */
-  flickrId: number;
+  flickrId: bigint;
   /**
    * ID of file category (first-layer folder)
    */
-  categoryId: string;
+  categoryId: bigint;
   /**
    * ID of file taker (sub-folder name under category folder)
    */
-  photographerId: string;
+  photographerId: bigint;
   /**
    * File name
    */

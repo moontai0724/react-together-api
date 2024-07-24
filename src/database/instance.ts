@@ -30,4 +30,5 @@ const dialect = new MysqlDialect({
 export const db = new Kysely<Database>({
   dialect,
   plugins: [new CamelCasePlugin()],
+  log: ["error"],
 });

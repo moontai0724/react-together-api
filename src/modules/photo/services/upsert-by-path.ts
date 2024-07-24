@@ -1,0 +1,56 @@
+import { flickrPhotoService } from "modules/flickr-photo";
+
+import { getOneByPath, update } from "../repositories";
+import { create } from "./create";
+
+export interface UpsertByPathParams {
+  categoryId: bigint;
+  photographerId: bigint;
+  fileName: string;
+  integrity: string;
+  file:
+    | {
+        buffer: Buffer;
+      }
+    | {
+        id: bigint;
+      };
+}
+
+/**
+ * @returns updated or created photo id
+ */
+export async function upsertByPath({
+  categoryId,
+  photographerId,
+  fileName,
+  integrity,
+  file,
+}: UpsertByPathParams) {
+  const existing = await getOneByPath({
+    categoryId,
+    photographerId,
+    fileName,
+  });
+  const flickrPhotoId =
+    "id" in file ? file.id : (await flickrPhotoService.create({ file })).id;
+
+  if (existing) {
+    const updated = update(existing.id, {
+      flickrId: flickrPhotoId,
+      integrity,
+    });
+
+    if (!updated) throw new Error("Failed to update photo");
+
+    return existing.id;
+  }
+
+  return create({
+    categoryId,
+    photographerId,
+    fileName,
+    integrity,
+    file: { id: flickrPhotoId },
+  });
+}
