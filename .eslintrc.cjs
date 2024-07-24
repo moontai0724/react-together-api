@@ -34,6 +34,8 @@ module.exports = {
   },
   rules: {
     "no-console": "off",
+    "no-plusplus": "off",
+    "no-await-in-loop": "off",
 
     "sort-imports": "off",
     "simple-import-sort/imports": "error",

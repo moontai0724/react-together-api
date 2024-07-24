@@ -1,9 +1,13 @@
-import { type Category, db } from "database";
+import { type Category, db, type Photographer } from "database";
 
 import { loadCategories } from "./load-categories";
 import { loadPhotographers } from "./load-photographers";
 import { loadPhotos } from "./load-photos";
 import { queuedPhotos } from "./photo-queue";
+
+interface CategoryWithPhotographers extends Category {
+  photographers: Photographer[];
+}
 
 async function loadCategoryPhotographers(category: Category) {
   const photographers = await loadPhotographers(category);
@@ -15,7 +19,15 @@ async function loadCategoryPhotographers(category: Category) {
 }
 
 async function loadAllPhotographers(categories: Category[]) {
-  return Promise.all(categories.map(loadCategoryPhotographers));
+  const newCategories: CategoryWithPhotographers[] = [];
+
+  for (let index = 0; index < categories.length; index++) {
+    const category = await loadCategoryPhotographers(categories[index]);
+
+    newCategories.push(category);
+  }
+
+  return newCategories;
 }
 
 (async () => {
