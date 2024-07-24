@@ -2,8 +2,10 @@ import { type FlickrPhoto } from "database";
 import dayjs from "dayjs";
 
 import { create as createRecord, getOne } from "../repositories";
+import { getOneByIntegrity } from "../repositories/get-one-by-integrity";
 
 export interface CreateAndUploadParams {
+  integrity: string;
   file: {
     buffer: Buffer;
   };
@@ -11,13 +13,16 @@ export interface CreateAndUploadParams {
 
 // TODO: implement
 export async function create({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  file,
+  integrity,
 }: CreateAndUploadParams): Promise<FlickrPhoto> {
   const fakeId = BigInt(Math.floor(Math.random() * 100000000));
+  const existing = await getOneByIntegrity(integrity);
+
+  if (existing) return existing;
 
   const insertId = await createRecord({
     id: fakeId,
+    integrity,
     url: `https://www.flickr.com/photos/fake/${fakeId}`,
     takenAt: dayjs().format("YYYY-MM-DD HH:mm:ss"),
     uploadedAt: dayjs().format("YYYY-MM-DD HH:mm:ss"),

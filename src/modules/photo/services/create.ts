@@ -4,6 +4,7 @@ import { flickrPhotoService } from "modules/flickr-photo";
 import { create as createRecord } from "../repositories";
 
 export interface CreateParams extends Omit<NewPhoto, "flickrId"> {
+  integrity: string;
   file:
     | {
         buffer: Buffer;
@@ -24,14 +25,15 @@ export async function create({
   file,
 }: CreateParams) {
   const flickrPhotoId =
-    "id" in file ? file.id : (await flickrPhotoService.create({ file })).id;
+    "id" in file
+      ? file.id
+      : (await flickrPhotoService.create({ integrity, file })).id;
 
   const createdId = await createRecord({
     categoryId,
     photographerId,
     fileName,
     flickrId: flickrPhotoId,
-    integrity,
   });
 
   if (!createdId) throw new Error("Failed to create a record");

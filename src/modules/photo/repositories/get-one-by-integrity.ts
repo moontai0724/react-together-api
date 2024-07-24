@@ -5,8 +5,9 @@ export async function getOneByIntegrity(
 ): Promise<Photo | null> {
   const result = await db
     .selectFrom("photos")
-    .where("integrity", "=", integrity)
-    .selectAll()
+    .leftJoin("flickrPhotos", "flickrPhotos.id", "photos.flickrId")
+    .where("flickrPhotos.integrity", "=", integrity)
+    .selectAll("photos")
     .executeTakeFirst();
 
   return result ?? null;

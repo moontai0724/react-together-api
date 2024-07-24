@@ -28,10 +28,6 @@ export interface PhotoTable {
    */
   fileName: string;
   /**
-   * Latest file integrity
-   */
-  integrity: string;
-  /**
    * Time the photo was uploaded to this system
    */
   createdAt: ColumnType<Date, string | undefined, never>;

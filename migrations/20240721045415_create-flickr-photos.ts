@@ -7,6 +7,8 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .createTable("flickr_photos")
     // Flickr photo ID
     .addColumn("id", "bigint", (col) => col.primaryKey().unsigned())
+    // local calculated file integrity
+    .addColumn("integrity", "char(64)", (col) => col.notNull().unique())
     // Flickr photo page
     .addColumn("url", "varchar(100)", (col) => col.notNull())
     // Photo taken time from Flickr

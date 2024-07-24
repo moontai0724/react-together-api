@@ -39,7 +39,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
       "photographer_id",
       "file_name",
     ])
-    .addColumn("integrity", "char(64)", (col) => col.notNull().unique())
     .$call(withTimestamps)
     .addColumn("deleted_at", "timestamp", (col) => col.defaultTo(null))
     .execute();

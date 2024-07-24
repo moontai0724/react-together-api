@@ -33,12 +33,13 @@ export async function upsertByPath({
     fileName,
   });
   const flickrPhotoId =
-    "id" in file ? file.id : (await flickrPhotoService.create({ file })).id;
+    "id" in file
+      ? file.id
+      : (await flickrPhotoService.create({ integrity, file })).id;
 
   if (existing) {
     const updated = update(existing.id, {
       flickrId: flickrPhotoId,
-      integrity,
     });
 
     if (!updated) throw new Error("Failed to update photo");

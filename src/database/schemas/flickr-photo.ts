@@ -6,6 +6,10 @@ export interface FlickrPhotoTable {
    */
   id: bigint;
   /**
+   * Latest file integrity
+   */
+  integrity: string;
+  /**
    * Flickr photo page
    */
   url: string;
