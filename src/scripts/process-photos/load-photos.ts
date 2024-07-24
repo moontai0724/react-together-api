@@ -4,15 +4,15 @@ import { resolve } from "node:path";
 
 import type { Category, Photographer } from "database";
 import { photoService } from "modules/photo";
+import { env } from "persistance";
 
-import { photosRootPath } from "./common";
 import { getFiles } from "./get-files";
 import { handlePhoto, type WaitingPhoto } from "./photo-queue";
 
 async function readPhoto(info: WaitingPhoto) {
   const { category, photographer, fileName } = info;
   const filePath = resolve(
-    photosRootPath,
+    env.file.root,
     category.label,
     photographer.name,
     fileName,
@@ -59,7 +59,7 @@ export async function loadPhotos(
   category: Category,
   photographer: Photographer,
 ) {
-  const rootPath = resolve(photosRootPath, category.label, photographer.name);
+  const rootPath = resolve(env.file.root, category.label, photographer.name);
   const files = await getFiles(rootPath);
 
   const processings = files.map((fileName) =>

@@ -1,3 +1,5 @@
+import { resolve } from "node:path";
+
 export const database = {
   host: process.env.DB_HOST || "localhost",
   port: parseInt(process.env.DB_PORT || "3306", 10),
@@ -7,5 +9,5 @@ export const database = {
 };
 
 export const file = {
-  root: process.env.FILE_ROOT || "./photos",
+  root: resolve(process.env.FILE_ROOT || "./photos"),
 };

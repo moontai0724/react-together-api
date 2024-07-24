@@ -1,5 +1,6 @@
 import { type Category, db, type Photographer } from "database";
 
+import { cleanup } from "./cleanup";
 import { loadCategories } from "./load-categories";
 import { loadPhotographers } from "./load-photographers";
 import { loadPhotos } from "./load-photos";
@@ -46,10 +47,12 @@ async function loadAllPhotographers(categories: Category[]) {
   ).then((results) => results.flat());
 
   if (queuedPhotos.length > 0) {
-    console.error("queued photos still exist", queuedPhotos);
+    console.error("Queued photos still exist", queuedPhotos);
   }
 
-  console.log(`proceed ${allPhotosImportResults.length} photos`);
+  console.log(`Proceed ${allPhotosImportResults.length} photos`);
+
+  await cleanup();
 
   db.destroy();
 })();
