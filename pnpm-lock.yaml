@@ -14,6 +14,9 @@ dependencies:
   '@fastify/swagger-ui':
     specifier: ^4.0.1
     version: 4.0.1
+  '@moontai0724/flickr-sdk':
+    specifier: ^1.0.0
+    version: 1.0.0
   '@sinclair/typebox':
     specifier: ^0.32.34
     version: 0.32.34
@@ -741,6 +744,12 @@ packages:
   /@lukeed/ms@2.0.2:
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
+    dev: false
+
+  /@moontai0724/flickr-sdk@1.0.0:
+    resolution: {integrity: sha512-f0gvvlnV6UCbRaerf/KWKiM3toQ63PK4Ge0T5H+09WKDXbhyPjpLYIXcloYtjqJCNfeW+Se9ol+h5T78DD6ZEg==}
+    dependencies:
+      hash-wasm: 4.11.0
     dev: false
 
   /@nodelib/fs.scandir@2.1.5:
@@ -3354,6 +3363,10 @@ packages:
     dependencies:
       has-symbols: 1.0.3
     dev: true
+
+  /hash-wasm@4.11.0:
+    resolution: {integrity: sha512-HVusNXlVqHe0fzIzdQOGolnFN6mX/fqcrSAOcTBXdvzrXVHwTz11vXeKRmkR5gTuwVpvHZEIyKoePDvuAR+XwQ==}
+    dev: false
 
   /hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}

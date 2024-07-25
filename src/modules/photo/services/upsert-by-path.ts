@@ -11,6 +11,7 @@ export interface UpsertByPathParams {
   integrity: FlickrPhoto["integrity"];
   file:
     | {
+        name: string;
         buffer: Buffer;
       }
     | {

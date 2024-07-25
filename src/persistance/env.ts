@@ -11,3 +11,10 @@ export const database = {
 export const file = {
   root: resolve(process.env.FILE_ROOT || "./photos"),
 };
+
+export const flickrCredentials = {
+  apiKey: process.env.FLICKR_API_KEY || "",
+  consumerSecret: process.env.FLICKR_API_SECRET || "",
+  oauthToken: process.env.FLICKR_OAUTH_TOKEN || "",
+  oauthTokenSecret: process.env.FLICKR_OAUTH_SECRET || "",
+};

@@ -7,6 +7,7 @@ export interface CreateParams extends Omit<NewPhoto, "flickrId"> {
   integrity: FlickrPhoto["integrity"];
   file:
     | {
+        name: string;
         buffer: Buffer;
       }
     | {

@@ -47,7 +47,10 @@ async function loadPhoto(info: WaitingPhoto) {
       photographerId: info.photographer.id,
       fileName: info.fileName,
       integrity,
-      file: { buffer: fileBuffer },
+      file: {
+        name: info.fileName,
+        buffer: fileBuffer,
+      },
     })
     .catch((err) => console.error("Failed to upsert photo", err));
 }
