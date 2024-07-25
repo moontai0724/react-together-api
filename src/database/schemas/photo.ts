@@ -6,23 +6,27 @@ import type {
   Updateable,
 } from "kysely";
 
+import type { Category } from "./category";
+import type { FlickrPhoto } from "./flickr-photo";
+import type { Photographer } from "./photographer";
+
 export interface PhotoTable {
   /**
    * Auto-incremented serial id for photo in this system
    */
-  id: Generated<bigint>;
+  id: Generated<number>;
   /**
    * Flickr photo ID, reference to flickr_photos.id
    */
-  flickrId: bigint;
+  flickrId: FlickrPhoto["id"];
   /**
    * ID of file category (first-layer folder)
    */
-  categoryId: bigint;
+  categoryId: Category["id"];
   /**
    * ID of file taker (sub-folder name under category folder)
    */
-  photographerId: bigint;
+  photographerId: Photographer["id"];
   /**
    * File name
    */

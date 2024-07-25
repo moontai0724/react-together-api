@@ -4,7 +4,7 @@ export interface FlickrPhotoTable {
   /**
    * Flickr photo ID
    */
-  id: bigint;
+  id: number;
   /**
    * Latest file integrity
    */

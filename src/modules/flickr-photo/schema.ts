@@ -7,6 +7,11 @@ export const flickrPhotoSchema = Type.Object({
   url: Type.String({
     description: "Flickr photo page",
   }),
+  integrity: Type.String({
+    description: "File integrity",
+    minLength: 64,
+    maxLength: 64,
+  }),
   takenAt: Type.String({
     description: "Photo taken time from Flickr",
   }),

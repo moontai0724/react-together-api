@@ -4,7 +4,7 @@ export interface CategoryTable {
   /**
    * Auto-incremented serial id for Category in this system
    */
-  id: Generated<bigint>;
+  id: Generated<number>;
   /**
    * Category label
    */

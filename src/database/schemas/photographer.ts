@@ -4,7 +4,7 @@ export interface PhotographerTable {
   /**
    * Auto-incremented serial id for photographer in this system
    */
-  id: Generated<bigint>;
+  id: Generated<number>;
   /**
    * Photographer name
    */

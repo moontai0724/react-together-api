@@ -17,11 +17,6 @@ export const photoSchema = Type.Object({
   fileName: Type.String({
     description: "File name",
   }),
-  integrity: Type.String({
-    description: "Latest file integrity",
-    minLength: 32,
-    maxLength: 32,
-  }),
   createdAt: Type.String({
     description: "Time the photo was uploaded to this system",
   }),
