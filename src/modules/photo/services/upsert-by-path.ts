@@ -1,19 +1,20 @@
+import type { FlickrPhoto, Photo } from "database";
 import { flickrPhotoService } from "modules/flickr-photo";
 
 import { getOneByPath, update } from "../repositories";
 import { create } from "./create";
 
 export interface UpsertByPathParams {
-  categoryId: bigint;
-  photographerId: bigint;
-  fileName: string;
-  integrity: string;
+  categoryId: Photo["categoryId"];
+  photographerId: Photo["photographerId"];
+  fileName: Photo["fileName"];
+  integrity: FlickrPhoto["integrity"];
   file:
     | {
         buffer: Buffer;
       }
     | {
-        id: bigint;
+        id: FlickrPhoto["id"];
       };
 }
 

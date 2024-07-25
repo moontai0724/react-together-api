@@ -1,7 +1,7 @@
-import { db, type Photo } from "database";
+import { db, type FlickrPhoto, type Photo } from "database";
 
 export async function getOneByIntegrity(
-  integrity: string,
+  integrity: FlickrPhoto["integrity"],
 ): Promise<Photo | null> {
   const result = await db
     .selectFrom("photos")

@@ -15,7 +15,7 @@ export interface CreateAndUploadParams {
 export async function create({
   integrity,
 }: CreateAndUploadParams): Promise<FlickrPhoto> {
-  const fakeId = BigInt(Math.floor(Math.random() * 100000000));
+  const fakeId = Math.floor(Math.random() * 100000000);
   const existing = await getOneByIntegrity(integrity);
 
   if (existing) return existing;

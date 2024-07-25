@@ -1,16 +1,16 @@
-import { type NewPhoto } from "database";
+import type { FlickrPhoto, NewPhoto } from "database";
 import { flickrPhotoService } from "modules/flickr-photo";
 
 import { create as createRecord } from "../repositories";
 
 export interface CreateParams extends Omit<NewPhoto, "flickrId"> {
-  integrity: string;
+  integrity: FlickrPhoto["integrity"];
   file:
     | {
         buffer: Buffer;
       }
     | {
-        id: bigint;
+        id: FlickrPhoto["id"];
       };
 }
 

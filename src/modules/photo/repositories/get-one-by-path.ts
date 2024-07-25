@@ -1,9 +1,9 @@
 import { db, type Photo } from "database";
 
 export interface GetOneByPathParams {
-  categoryId: bigint;
-  photographerId: bigint;
-  fileName: string;
+  categoryId: Photo["categoryId"];
+  photographerId: Photo["photographerId"];
+  fileName: Photo["fileName"];
 }
 
 export async function getOneByPath({

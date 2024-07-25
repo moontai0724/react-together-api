@@ -1,11 +1,13 @@
+import type { FlickrPhoto, Photo } from "database";
+
 import { getOneByIntegrity } from "../repositories/get-one-by-integrity";
 import { update } from "../repositories/update";
 
 export interface UpdatePathByIntegrityParams {
-  integrity: string;
-  categoryId: bigint;
-  photographerId: bigint;
-  fileName: string;
+  integrity: FlickrPhoto["integrity"];
+  categoryId: Photo["categoryId"];
+  photographerId: Photo["photographerId"];
+  fileName: Photo["fileName"];
 }
 
 /**
