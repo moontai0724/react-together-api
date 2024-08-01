@@ -1,4 +1,4 @@
-import { apis } from "@moontai0724/flickr-sdk";
+import { flickrApis } from "@moontai0724/flickr-sdk";
 import { type FlickrPhoto } from "database";
 import dayjs from "dayjs";
 import { flickrPhotoSizeRepository } from "modules/flickr-photo-size";
@@ -17,7 +17,7 @@ export interface CreateAndUploadParams {
 }
 
 async function upload(photo: File) {
-  const uploadedId = await apis.upload.upload({
+  const uploadedId = await flickrApis.upload.upload({
     credentials: flickrCredentials,
     photo,
   });
@@ -25,11 +25,11 @@ async function upload(photo: File) {
   if (!uploadedId) throw new Error("Failed to upload photo");
 
   const [photoInfo, photoSizes] = await Promise.all([
-    apis.rest.photos.getInfo({
+    flickrApis.rest.photos.getInfo({
       credentials: flickrCredentials,
       photoId: uploadedId,
     }),
-    apis.rest.photos.getSizes({
+    flickrApis.rest.photos.getSizes({
       credentials: flickrCredentials,
       photoId: uploadedId,
     }),

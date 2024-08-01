@@ -46,7 +46,7 @@
     "@fastify/autoload": "^5.10.0",
     "@fastify/swagger": "^8.14.0",
     "@fastify/swagger-ui": "^4.0.1",
-    "@moontai0724/flickr-sdk": "^1.0.0",
+    "@moontai0724/flickr-sdk": "^1.1.2",
     "@sinclair/typebox": "^0.32.34",
     "dayjs": "^1.11.12",
     "dotenv-cli": "^7.4.2",

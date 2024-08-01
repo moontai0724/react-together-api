@@ -15,8 +15,8 @@ dependencies:
     specifier: ^4.0.1
     version: 4.0.1
   '@moontai0724/flickr-sdk':
-    specifier: ^1.0.0
-    version: 1.0.0
+    specifier: ^1.1.2
+    version: 1.1.2
   '@sinclair/typebox':
     specifier: ^0.32.34
     version: 0.32.34
@@ -746,8 +746,8 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /@moontai0724/flickr-sdk@1.0.0:
-    resolution: {integrity: sha512-f0gvvlnV6UCbRaerf/KWKiM3toQ63PK4Ge0T5H+09WKDXbhyPjpLYIXcloYtjqJCNfeW+Se9ol+h5T78DD6ZEg==}
+  /@moontai0724/flickr-sdk@1.1.2:
+    resolution: {integrity: sha512-yTtqVpZj8mHk0eORrpJ+Gn+KXQm1dVAsUGSjTQjYZNIXPcpPcs3TYp+yfPfHtbTB2Xf24B7y7CjpUnr67i7s0g==}
     dependencies:
       hash-wasm: 4.11.0
     dev: false
@@ -3324,7 +3324,7 @@ packages:
       source-map: 0.6.1
       wordwrap: 1.0.0
     optionalDependencies:
-      uglify-js: 3.19.0
+      uglify-js: 3.19.1
     dev: true
 
   /has-bigints@1.0.2:
@@ -5837,8 +5837,8 @@ packages:
   /ufo@1.5.4:
     resolution: {integrity: sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==}
 
-  /uglify-js@3.19.0:
-    resolution: {integrity: sha512-wNKHUY2hYYkf6oSFfhwwiHo4WCHzHmzcXsqXYTN9ja3iApYIFbb2U6ics9hBcYLHcYGQoAlwnZlTrf3oF+BL/Q==}
+  /uglify-js@3.19.1:
+    resolution: {integrity: sha512-y/2wiW+ceTYR2TSSptAhfnEtpLaQ4Ups5zrjB2d3kuVxHj16j/QJwPl5PvuGy9uARb39J0+iKxcRPvtpsx4A4A==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     requiresBuild: true
