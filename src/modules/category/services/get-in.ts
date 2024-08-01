@@ -1,6 +1,6 @@
-import { db } from "database";
+import { type Category, db } from "database";
 
-export async function getIn(categoryIds: bigint[]) {
+export async function getIn(categoryIds: Category["id"][]) {
   return db
     .selectFrom("categories")
     .where("id", "in", categoryIds)

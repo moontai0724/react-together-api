@@ -35,7 +35,7 @@ async function upload(photo: File) {
     }),
   ]);
 
-  const id = +photoInfo.id;
+  const id = BigInt(photoInfo.id);
   const url = photoInfo.urls.url.shift()!;
   const uploadedAt = dayjs(+photoInfo.dates.posted * 1000).format(
     timeFormat.datetime,

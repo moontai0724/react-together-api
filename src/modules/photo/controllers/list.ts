@@ -54,20 +54,24 @@ export const list: TypedRouteHandler<typeof listSchema> = async (request) => {
 
       return { [key]: direction };
     }),
-    photographerIds,
-    categoryIds,
+    photographerIds: photographerIds?.map(BigInt),
+    categoryIds: categoryIds?.map(BigInt),
     page: {
       limit,
       offset: (page - 1) * limit,
     },
   });
 
-  const formatted = photos.map((photo) => ({
-    ...photo,
-    createdAt: photo.createdAt.toISOString(),
-    updatedAt: photo.updatedAt.toISOString(),
-    deletedAt: photo.deletedAt?.toISOString() ?? null,
-  }));
-
-  return { data: formatted };
+  return {
+    data: photos.map((photo) => ({
+      id: Number(photo.id),
+      flickrId: Number(photo.flickrId),
+      categoryId: Number(photo.categoryId),
+      photographerId: Number(photo.photographerId),
+      fileName: photo.fileName,
+      createdAt: photo.createdAt.toISOString(),
+      updatedAt: photo.updatedAt.toISOString(),
+      deletedAt: photo.deletedAt?.toISOString() ?? null,
+    })),
+  };
 };

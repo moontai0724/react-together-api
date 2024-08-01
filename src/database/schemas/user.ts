@@ -10,7 +10,7 @@ export interface UserTable {
   /**
    * Auto-incremented serial id for user in this system
    */
-  id: Generated<number>;
+  id: Generated<bigint>;
   /**
    * User email
    */

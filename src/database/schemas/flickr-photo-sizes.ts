@@ -6,7 +6,7 @@ export interface FlickrPhotoSizeTable {
   /**
    * Auto-incremented serial id in this system
    */
-  id: Generated<number>;
+  id: Generated<bigint>;
   /**
    * Flickr photo ID, reference to flickr_photos.id
    */

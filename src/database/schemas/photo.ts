@@ -14,7 +14,7 @@ export interface PhotoTable {
   /**
    * Auto-incremented serial id for photo in this system
    */
-  id: Generated<number>;
+  id: Generated<bigint>;
   /**
    * Flickr photo ID, reference to flickr_photos.id
    */
