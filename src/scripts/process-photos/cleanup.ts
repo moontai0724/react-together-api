@@ -7,15 +7,22 @@ import { flickrCredentials } from "persistance/env";
 import { placeholderPhotoId } from "./const";
 
 export async function cleanup() {
-  const result = await Promise.all([
+  const [category, photographer, flickrPhoto, placeholder] = await Promise.all([
     categoryRepository.deleteRedundant(),
     photographerRepository.deleteRedundant(),
     flickrPhotoRepository.deleteRedundant(),
-    flickrApis.rest.photos.delete({
-      credentials: flickrCredentials,
-      photoId: placeholderPhotoId,
-    }),
+    flickrApis.rest.photos
+      .delete({
+        credentials: flickrCredentials,
+        photoId: placeholderPhotoId,
+      })
+      .catch((e) => e),
   ]);
 
-  console.log(result);
+  console.log("cleanup result:", {
+    category,
+    photographer,
+    flickrPhoto,
+    placeholder,
+  });
 }

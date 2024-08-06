@@ -62,6 +62,7 @@ export async function loadPhotos(
   category: Category,
   photographer: Photographer,
 ) {
+  console.log(`Loading photos for ${category.label}/${photographer.name}`);
   const rootPath = resolve(env.file.root, category.label, photographer.name);
   const files = await getFiles(rootPath);
 

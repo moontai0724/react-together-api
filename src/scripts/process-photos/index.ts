@@ -25,6 +25,8 @@ async function loadAllPhotographers(categories: Category[]) {
   for (let index = 0; index < categories.length; index++) {
     const category = await loadCategoryPhotographers(categories[index]);
 
+    console.log(`Category loaded: `, category);
+
     newCategories.push(category);
   }
 
