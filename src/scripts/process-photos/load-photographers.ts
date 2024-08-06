@@ -21,9 +21,7 @@ async function createPhotographers(photographers: string[]) {
 export async function loadPhotographers(category: Category) {
   const rootPath = resolve(env.file.root, category.label);
   const photographers = await getFolders(rootPath);
-  const photographersIds = await createPhotographers(photographers);
-  const createdPhotographers =
-    await photographerService.getIn(photographersIds);
+  const createdPhotographers = await createPhotographers(photographers);
 
   return createdPhotographers;
 }

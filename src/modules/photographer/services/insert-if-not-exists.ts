@@ -1,13 +1,15 @@
-import { db } from "database";
+import { db, type Photographer } from "database";
 
-export async function insertIfNotExists(category: string) {
+export async function insertIfNotExists(
+  category: string,
+): Promise<Photographer> {
   const existing = await db
     .selectFrom("photographers")
     .where("name", "=", category)
     .selectAll()
     .executeTakeFirst();
 
-  if (existing) return existing.id;
+  if (existing) return existing;
 
   const result = await db
     .insertInto("photographers")
@@ -16,5 +18,8 @@ export async function insertIfNotExists(category: string) {
 
   if (!result.insertId) throw new Error("Failed to insert photographer");
 
-  return result.insertId;
+  return {
+    id: result.insertId,
+    name: category,
+  };
 }

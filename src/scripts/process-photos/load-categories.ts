@@ -18,8 +18,7 @@ async function createCategories(categories: string[]) {
  */
 export async function loadCategories() {
   const categories = await getFolders(env.file.root);
-  const categoriesIds = await createCategories(categories);
-  const createdCategories = await categoryService.getIn(categoriesIds);
+  const createdCategories = await createCategories(categories);
 
   return createdCategories;
 }
