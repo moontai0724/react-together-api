@@ -16,8 +16,15 @@ const config: PoolOptions = {
 const dialect = new MysqlDialect({
   pool: createPool({
     ...config,
-    // Map tinyint(1) to boolean
     typeCast(field, next) {
+      if (field.type === "LONGLONG") {
+        const value = field.string();
+
+        if (!value) return null;
+
+        return BigInt(value);
+      }
+
       if (field.type === "TINY" && field.length === 1) {
         return field.string() === "1";
       }
