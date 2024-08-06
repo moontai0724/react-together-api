@@ -14,9 +14,14 @@ export async function insertIfNotExists(
 
   if (existing) return existing;
 
+  const { title, description } = category.match(
+    /【(?<title>.*?)】(?<description>.*)/,
+  )?.groups ?? { title: category };
+
   const { id: flickrPhotosetId } = await flickrApis.rest.photosets.create({
     credentials: flickrCredentials,
-    title: category,
+    title,
+    description,
     primaryPhotoId,
   });
 
