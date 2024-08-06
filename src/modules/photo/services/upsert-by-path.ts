@@ -1,11 +1,13 @@
-import type { FlickrPhoto, Photo } from "database";
+import { flickrApis } from "@moontai0724/flickr-sdk";
+import type { Category, FlickrPhoto, Photo } from "database";
 import { flickrPhotoService } from "modules/flickr-photo";
+import { flickrCredentials } from "persistance/env";
 
 import { getOneByPath, update } from "../repositories";
 import { create } from "./create";
 
 export interface UpsertByPathParams {
-  categoryId: Photo["categoryId"];
+  category: Pick<Category, "id"> & Partial<Category>;
   photographerId: Photo["photographerId"];
   fileName: Photo["fileName"];
   integrity: FlickrPhoto["integrity"];
@@ -23,14 +25,14 @@ export interface UpsertByPathParams {
  * @returns updated or created photo id
  */
 export async function upsertByPath({
-  categoryId,
+  category,
   photographerId,
   fileName,
   integrity,
   file,
 }: UpsertByPathParams) {
   const existing = await getOneByPath({
-    categoryId,
+    categoryId: category.id,
     photographerId,
     fileName,
   });
@@ -49,8 +51,17 @@ export async function upsertByPath({
     return existing.id;
   }
 
+  if (!category.flickrPhotosetId)
+    throw new Error("Category has no flickr photoset id");
+
+  await flickrApis.rest.photosets.addPhoto({
+    credentials: flickrCredentials,
+    photosetId: category.flickrPhotosetId.toString(),
+    photoId: flickrPhotoId.toString(),
+  });
+
   return create({
-    categoryId,
+    categoryId: category.id,
     photographerId,
     fileName,
     integrity,

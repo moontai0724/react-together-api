@@ -43,7 +43,7 @@ async function loadPhoto(info: WaitingPhoto) {
 
   return photoService
     .upsertByPath({
-      categoryId: info.category.id,
+      category: info.category,
       photographerId: info.photographer.id,
       fileName: info.fileName,
       integrity,

@@ -1,12 +1,13 @@
 import { categoryService } from "modules/category";
 import { env } from "persistance";
 
+import { placeholderPhotoId } from "./const";
 import { getFolders } from "./get-folders";
 
 async function createCategories(categories: string[]) {
   return Promise.all(
     categories.map(async (category) =>
-      categoryService.insertIfNotExists(category),
+      categoryService.insertIfNotExists(category, placeholderPhotoId),
     ),
   );
 }

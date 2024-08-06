@@ -7,4 +7,7 @@ export const categorySchema = Type.Object({
   label: Type.String({
     description: "Category label",
   }),
+  flickrPhotosetId: Type.Integer({
+    description: "Flickr photoset id",
+  }),
 });

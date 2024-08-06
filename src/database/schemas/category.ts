@@ -9,6 +9,10 @@ export interface CategoryTable {
    * Category label
    */
   label: string;
+  /**
+   * Flickr photoset id
+   */
+  flickrPhotosetId: bigint;
 }
 
 export type Category = Selectable<CategoryTable>;
