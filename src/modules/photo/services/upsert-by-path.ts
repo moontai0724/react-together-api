@@ -21,35 +21,41 @@ export interface UpsertByPathParams {
       };
 }
 
-/**
- * @returns updated or created photo id
- */
-export async function upsertByPath({
+async function updateExisting(
+  existing: Photo,
+  { integrity, file }: UpsertByPathParams,
+) {
+  console.log(`Updating existing photo...`, existing);
+  const { flickrId } = existing;
+
+  const newFlickrPhotoId =
+    "id" in file
+      ? file.id
+      : (await flickrPhotoService.update({ flickrId, integrity, file })).id;
+
+  if (newFlickrPhotoId && newFlickrPhotoId !== flickrId) {
+    const updated = update(existing.id, {
+      flickrId: BigInt(newFlickrPhotoId),
+    });
+
+    if (!updated) throw new Error("Failed to update photo");
+  }
+
+  return existing.id;
+}
+
+async function createNew({
   category,
   photographerId,
   fileName,
   integrity,
   file,
 }: UpsertByPathParams) {
-  const existing = await getOneByPath({
-    categoryId: category.id,
-    photographerId,
-    fileName,
-  });
+  console.log(`Creating new photo...`, { category, photographerId, fileName });
   const flickrPhotoId =
     "id" in file
       ? file.id
       : (await flickrPhotoService.create({ integrity, file })).id;
-
-  if (existing) {
-    const updated = update(existing.id, {
-      flickrId: flickrPhotoId,
-    });
-
-    if (!updated) throw new Error("Failed to update photo");
-
-    return existing.id;
-  }
 
   if (!category.flickrPhotosetId)
     throw new Error("Category has no flickr photoset id");
@@ -66,5 +72,39 @@ export async function upsertByPath({
     fileName,
     integrity,
     file: { id: flickrPhotoId },
+  });
+}
+
+/**
+ * @returns updated or created photo id
+ */
+export async function upsertByPath({
+  category,
+  photographerId,
+  fileName,
+  integrity,
+  file,
+}: UpsertByPathParams) {
+  const existing = await getOneByPath({
+    categoryId: category.id,
+    photographerId,
+    fileName,
+  });
+
+  if (existing)
+    return updateExisting(existing, {
+      category,
+      photographerId,
+      fileName,
+      integrity,
+      file,
+    });
+
+  return createNew({
+    category,
+    photographerId,
+    fileName,
+    integrity,
+    file,
   });
 }

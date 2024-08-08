@@ -23,6 +23,13 @@ export async function updatePathByIntegrity({
 
   if (!existing) return null;
 
+  console.log(`Updating photo by integrity...`, existing, {
+    categoryId,
+    photographerId,
+    fileName,
+    integrity,
+  });
+
   const isCategorySame = existing.categoryId === categoryId;
   const isPhotographerSame = existing.photographerId === photographerId;
   const isFileNameSame = existing.fileName === fileName;

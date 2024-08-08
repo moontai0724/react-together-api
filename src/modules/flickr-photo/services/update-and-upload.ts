@@ -5,13 +5,11 @@ import { flickrPhotoSizeRepository } from "modules/flickr-photo-size";
 import { timeFormat } from "persistance/config";
 import { flickrCredentials } from "persistance/env";
 
-import {
-  create as createRecord,
-  getOne,
-  getOneByIntegrity,
-} from "../repositories";
+import { getOne, update as updateRecord } from "../repositories";
+import { getOneByIntegrity } from "../repositories/get-one-by-integrity";
 
-export interface CreateAndUploadParams {
+export interface UpdateAndUploadParams {
+  flickrId: FlickrPhoto["id"];
   integrity: string;
   file: {
     name: string;
@@ -19,22 +17,23 @@ export interface CreateAndUploadParams {
   };
 }
 
-async function upload(photo: File) {
-  const uploadedId = await flickrApis.upload.upload({
+async function replace(flickrId: FlickrPhoto["id"], photo: File) {
+  const { photoId: replacedId } = await flickrApis.upload.replace({
     credentials: flickrCredentials,
+    photoId: flickrId.toString(),
     photo,
   });
 
-  if (!uploadedId) throw new Error("Failed to upload photo");
+  if (!replacedId) throw new Error("Failed to replace photo");
 
   const [photoInfo, photoSizes] = await Promise.all([
     flickrApis.rest.photos.getInfo({
       credentials: flickrCredentials,
-      photoId: uploadedId,
+      photoId: replacedId,
     }),
     flickrApis.rest.photos.getSizes({
       credentials: flickrCredentials,
-      photoId: uploadedId,
+      photoId: replacedId,
     }),
   ]);
 
@@ -54,16 +53,20 @@ async function upload(photo: File) {
   };
 }
 
-export async function create({
+export async function update({
+  flickrId,
   integrity,
   file,
-}: CreateAndUploadParams): Promise<FlickrPhoto> {
+}: UpdateAndUploadParams): Promise<FlickrPhoto> {
   const existing = await getOneByIntegrity(integrity);
 
-  if (existing) return existing;
+  if (!existing) throw new Error("Failed to get record to update");
 
-  const flickrPhoto = await upload(new File([file.buffer], file.name));
-  const insertId = await createRecord({
+  const flickrPhoto = await replace(
+    flickrId,
+    new File([file.buffer], file.name),
+  );
+  const id = await updateRecord({
     id: flickrPhoto.id,
     integrity,
     url: flickrPhoto.url,
@@ -71,16 +74,17 @@ export async function create({
     uploadedAt: flickrPhoto.uploadedAt,
   });
 
-  if (!insertId) throw new Error("Failed to create a record");
+  if (!id) throw new Error("Failed to create a record");
 
+  await flickrPhotoSizeRepository.batchDeleteById(id);
   await flickrPhotoSizeRepository.batchInsert(
     flickrPhoto.sizes.map((size) => ({
       ...size,
-      flickrId: insertId,
+      flickrId: id,
     })),
   );
 
-  const created = await getOne(insertId);
+  const created = await getOne(id);
 
   if (!created) throw new Error("Failed to get created record");
 
