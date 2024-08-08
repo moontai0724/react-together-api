@@ -49,6 +49,7 @@ async function replace(flickrId: FlickrPhoto["id"], photo: File) {
     url,
     uploadedAt,
     takenAt,
+    isPublic: Boolean(photoInfo.visibility.ispublic),
     sizes: photoSizes.size,
   };
 }
@@ -72,6 +73,7 @@ export async function update({
     url: flickrPhoto.url,
     takenAt: flickrPhoto.takenAt,
     uploadedAt: flickrPhoto.uploadedAt,
+    isPublic: flickrPhoto.isPublic,
   });
 
   if (!id) throw new Error("Failed to create a record");

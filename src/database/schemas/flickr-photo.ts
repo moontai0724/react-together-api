@@ -21,6 +21,7 @@ export interface FlickrPhotoTable {
    * Photo uploaded time from Flickr
    */
   uploadedAt: string;
+  isPublic: boolean;
   createdAt: ColumnType<Date, string | undefined, never>;
   updatedAt: ColumnType<Date, string | undefined, string | undefined>;
 }

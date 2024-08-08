@@ -50,6 +50,7 @@ async function upload(photo: File) {
     url,
     uploadedAt,
     takenAt,
+    isPublic: Boolean(photoInfo.visibility.ispublic),
     sizes: photoSizes.size,
   };
 }
@@ -69,6 +70,7 @@ export async function create({
     url: flickrPhoto.url,
     takenAt: flickrPhoto.takenAt,
     uploadedAt: flickrPhoto.uploadedAt,
+    isPublic: flickrPhoto.isPublic,
   });
 
   if (!insertId) throw new Error("Failed to create a record");
