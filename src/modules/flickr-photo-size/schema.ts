@@ -1,9 +1,9 @@
-import { Type } from "@sinclair/typebox";
+import { type TBigInt, type TInteger, Type } from "@sinclair/typebox";
 
-export const photoSchema = Type.Object({
+export const flickrPhotoSizeSchema = Type.Object({
   id: Type.Integer({
     description: "Auto-incremented serial id in this system",
-  }),
+  }) as TInteger | TBigInt,
   flickrId: Type.Integer({
     description: "Flickr photo ID, reference to flickr_photos.id",
   }),

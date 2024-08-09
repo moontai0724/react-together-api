@@ -9,6 +9,13 @@ import type { FastifyOptions } from "types/fastify";
 
 import { openapiOptions } from "./persistance";
 
+// eslint-disable-next-line no-extend-native
+Object.defineProperty(BigInt.prototype, "toJSON", {
+  value() {
+    return parseInt(this, 10);
+  },
+});
+
 export function buildApp(options: FastifyOptions = {}) {
   const app = Fastify(options as never);
 

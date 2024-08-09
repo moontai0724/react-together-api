@@ -1,9 +1,14 @@
-import { type Static, Type } from "@sinclair/typebox";
+import {
+  type Static,
+  type TBigInt,
+  type TInteger,
+  Type,
+} from "@sinclair/typebox";
 
 export const flickrPhotoSchema = Type.Object({
   id: Type.Integer({
     description: "Flickr photo ID",
-  }),
+  }) as TInteger | TBigInt,
   url: Type.String({
     description: "Flickr photo page",
   }),

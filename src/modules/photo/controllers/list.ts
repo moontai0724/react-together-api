@@ -1,12 +1,30 @@
 import { Type } from "@sinclair/typebox";
 import { type FastifySchema } from "fastify";
-import { omitProperties } from "helpers/schema";
+import { pick, pickProperties } from "helpers/schema";
 import { categorySchema } from "modules/category";
+import { flickrPhotoSchema } from "modules/flickr-photo";
+import { flickrPhotoSizeSchema } from "modules/flickr-photo-size";
 import { photographerSchema } from "modules/photographer";
 import { type TypedRouteHandler } from "types/fastify";
 
-import { getAll } from "../repositories/get-all";
 import { photoSchema } from "../schema";
+import { getAll } from "../services";
+
+const listPhotoItemSchema = Type.Object({
+  ...pick(photoSchema.properties, ["id", "fileName"]),
+  category: pickProperties(categorySchema, ["id", "label"]),
+  photographer: pickProperties(photographerSchema, ["id", "name"]),
+  flickrPhoto: pickProperties(flickrPhotoSchema, ["id", "url", "takenAt"]),
+  flickrPhotoSizes: Type.Array(
+    pickProperties(flickrPhotoSizeSchema, [
+      "label",
+      "width",
+      "height",
+      "source",
+      "url",
+    ]),
+  ),
+});
 
 export const listSchema = {
   summary: "List photographers",
@@ -30,7 +48,7 @@ export const listSchema = {
   }),
   response: {
     "200": Type.Object({
-      data: Type.Array(omitProperties(photoSchema, ["deletedAt"])),
+      data: Type.Array(listPhotoItemSchema),
     }),
   },
 } satisfies FastifySchema;
@@ -47,8 +65,18 @@ export const list: TypedRouteHandler<typeof listSchema> = async (request) => {
   const photos = await getAll({
     orderBy: sort?.map((order) => {
       const [givenSort, givenKey] = order.split(":");
-      const direction = { DESC: "desc", ASC: "asc" }[givenSort];
-      const key = { takenAt: "takenAt", updatedAt: "updatedAt" }[givenKey];
+      const direction = (
+        {
+          DESC: "desc",
+          ASC: "asc",
+        } as const
+      )[givenSort];
+      const key = (
+        {
+          takenAt: "takenAt",
+          updatedAt: "updatedAt",
+        } as const
+      )[givenKey];
 
       if (!direction || !key) throw new Error(`Invalid sort option: ${order}`);
 
@@ -63,15 +91,6 @@ export const list: TypedRouteHandler<typeof listSchema> = async (request) => {
   });
 
   return {
-    data: photos.map((photo) => ({
-      id: Number(photo.id),
-      flickrId: Number(photo.flickrId),
-      categoryId: Number(photo.categoryId),
-      photographerId: Number(photo.photographerId),
-      fileName: photo.fileName,
-      createdAt: photo.createdAt.toISOString(),
-      updatedAt: photo.updatedAt.toISOString(),
-      deletedAt: photo.deletedAt?.toISOString() ?? null,
-    })),
+    data: photos,
   };
 };
