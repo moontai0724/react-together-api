@@ -7,6 +7,7 @@ import { flickrPhotoSizeSchema } from "modules/flickr-photo-size";
 import { photographerSchema } from "modules/photographer";
 import { type TypedRouteHandler } from "types/fastify";
 
+import { count } from "../repositories";
 import { photoSchema } from "../schema";
 import { getAll } from "../services";
 
@@ -43,11 +44,18 @@ export const listSchema = {
       Type.Array(photographerSchema.properties.id),
     ),
     categoryIds: Type.Optional(Type.Array(categorySchema.properties.id)),
-    page: Type.Optional(Type.Integer()),
-    size: Type.Optional(Type.Integer()),
+    page: Type.Optional(
+      Type.Integer({ minimum: 1, description: "current page index" }),
+    ),
+    size: Type.Optional(Type.Integer({ minimum: 1, description: "page size" })),
   }),
   response: {
     "200": Type.Object({
+      pagination: Type.Object({
+        page: Type.Integer({ description: "current page index" }),
+        size: Type.Integer({ description: "page size" }),
+        last: Type.Integer({ description: "last page index" }),
+      }),
       data: Type.Array(listPhotoItemSchema),
     }),
   },
@@ -90,7 +98,17 @@ export const list: TypedRouteHandler<typeof listSchema> = async (request) => {
     },
   });
 
+  const total = await count({
+    photographerIds: photographerIds?.map(BigInt),
+    categoryIds: categoryIds?.map(BigInt),
+  });
+
   return {
+    pagination: {
+      page,
+      size: limit,
+      last: Math.round(parseInt(total.toString(), 10) / limit),
+    },
     data: photos,
   };
 };
