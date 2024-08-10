@@ -4,6 +4,7 @@ import { pick, pickProperties } from "helpers/schema";
 import { categorySchema } from "modules/category";
 import { flickrPhotoSchema } from "modules/flickr-photo";
 import { flickrPhotoSizeSchema } from "modules/flickr-photo-size";
+import { photoReactionSchema } from "modules/photo-reaction";
 import { photographerSchema } from "modules/photographer";
 import { type TypedRouteHandler } from "types/fastify";
 
@@ -25,6 +26,18 @@ const listPhotoItemSchema = Type.Object({
       "url",
     ]),
   ),
+  reactions: Type.Object({
+    like: Type.Integer({ description: "number of recommendations" }),
+    dislike: Type.Integer({ description: "number of not recommendations" }),
+    comments: Type.Array(photoReactionSchema.properties.comment),
+  }),
+  reaction: Type.Union([
+    Type.Null(),
+    Type.Object({
+      recommend: photoReactionSchema.properties.isRecommended,
+      comment: photoReactionSchema.properties.comment,
+    }),
+  ]),
 });
 
 export const listSchema = {

@@ -27,14 +27,23 @@ export interface GetAllResult {
     FlickrPhotoSize,
     "label" | "width" | "height" | "source" | "url"
   >[];
+  reactions: {
+    like: number;
+    dislike: number;
+    comments: string[];
+  };
+  reaction: null | {
+    recommend: boolean;
+    comment: string;
+  };
 }
 
-export async function getAll({
+function allPhotos({
   orderBy,
   photographerIds,
   categoryIds,
   page,
-}: GetAllOptions = {}): Promise<GetAllResult[]> {
+}: GetAllOptions = {}) {
   let base = db
     .selectFrom("photos")
     .leftJoin("categories", "categories.id", "photos.categoryId")
@@ -67,24 +76,89 @@ export async function getAll({
 
   if (page) base = base.limit(page.limit).offset(page.offset);
 
-  const final = db
+  return base;
+}
+
+type IPhotosQuery = ReturnType<typeof allPhotos>;
+
+async function getSizes(base: IPhotosQuery) {
+  const sizes = await db
     .selectFrom(base.as("photos"))
     .leftJoin(
       "flickrPhotoSizes",
       "flickrPhotoSizes.flickrId",
       "photos.flickrPhotos-id",
     )
-    .selectAll("photos")
     .select([
-      "flickrPhotoSizes.id as flickrPhotoSizes-id",
-      "flickrPhotoSizes.label as flickrPhotoSizes-label",
-      "flickrPhotoSizes.width as flickrPhotoSizes-width",
-      "flickrPhotoSizes.height as flickrPhotoSizes-height",
-      "flickrPhotoSizes.source as flickrPhotoSizes-source",
-      "flickrPhotoSizes.url as flickrPhotoSizes-url",
-    ]);
+      "photos.id as photoId",
+      "flickrPhotoSizes.label as label",
+      "flickrPhotoSizes.width as width",
+      "flickrPhotoSizes.height as height",
+      "flickrPhotoSizes.source as source",
+      "flickrPhotoSizes.url as url",
+    ])
+    .execute();
 
-  const photos = await final.execute();
+  return sizes.reduce((acc, size) => {
+    const { photoId, ...sizeInfo } = size;
+
+    if (!acc.has(photoId)) acc.set(photoId, []);
+
+    const existing = acc.get(photoId)!;
+
+    existing.push(sizeInfo as GetAllResult["flickrPhotoSizes"][number]);
+
+    return acc;
+  }, new Map<bigint, GetAllResult["flickrPhotoSizes"]>());
+}
+
+async function getReactions(base: IPhotosQuery) {
+  const reactions = await db
+    .selectFrom(base.as("photos"))
+    .leftJoin("photoReactions", "photoReactions.photoId", "photos.id")
+    .select([
+      "photos.id as photoId",
+      "photoReactions.userId as userId",
+      "photoReactions.isRecommended as isRecommended",
+      "photoReactions.comment as comment",
+    ])
+    .execute();
+
+  return reactions.reduce((acc, reaction) => {
+    const { photoId, isRecommended, comment } = reaction;
+
+    if (!acc.has(photoId))
+      acc.set(photoId, {
+        reactions: {
+          like: 0,
+          dislike: 0,
+          comments: [],
+        },
+        // TODO: add own reaction detail if user is logged in
+        reaction: null,
+      });
+
+    const existing = acc.get(photoId)!;
+
+    existing.reactions[isRecommended ? "like" : "dislike"]++;
+
+    if (comment) existing.reactions.comments.push(comment);
+
+    return acc;
+  }, new Map<bigint, Pick<GetAllResult, "reactions" | "reaction">>());
+}
+
+export async function getAll({
+  orderBy,
+  photographerIds,
+  categoryIds,
+  page,
+}: GetAllOptions = {}): Promise<GetAllResult[]> {
+  const base = allPhotos({ orderBy, photographerIds, categoryIds, page });
+  const photos = await base.selectAll("photos").execute();
+
+  const sizes = await getSizes(base);
+  const reactions = await getReactions(base);
 
   return Array.from(
     photos
@@ -109,18 +183,13 @@ export async function getAll({
               takenAt: photo["flickrPhotos-takenAt"]!,
             },
             flickrPhotoSizes: [],
+            ...reactions.get(id)!,
           });
         }
 
         const existing = acc.get(id)!;
 
-        existing.flickrPhotoSizes.push({
-          label: photo["flickrPhotoSizes-label"]!,
-          width: photo["flickrPhotoSizes-width"]!,
-          height: photo["flickrPhotoSizes-height"]!,
-          source: photo["flickrPhotoSizes-source"]!,
-          url: photo["flickrPhotoSizes-url"]!,
-        });
+        existing.flickrPhotoSizes.push(...sizes.get(id)!);
 
         return acc;
       }, new Map<bigint, GetAllResult>())
