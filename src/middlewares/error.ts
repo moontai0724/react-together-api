@@ -1,6 +1,6 @@
 import { type FastifyInstance } from "fastify";
 import fastifyPlugin from "fastify-plugin";
-import { Exception, UnauthorizedExcetion } from "helpers/exceptions";
+import { Exception, UnauthorizedException } from "helpers/exceptions";
 
 type ErrorHandler = Parameters<FastifyInstance["setErrorHandler"]>[0];
 
@@ -14,7 +14,7 @@ function transformError(error: Error) {
     typeof error.code === "string" &&
     error.code.startsWith("FST_JWT_")
   ) {
-    return new UnauthorizedExcetion(error.message);
+    return new UnauthorizedException(error.message);
   }
 
   console.error("UNHANDLED ERROR: ", typeof error, error);

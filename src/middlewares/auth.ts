@@ -3,7 +3,7 @@ import { type User } from "database";
 import type { FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 import buildGetJwks from "get-jwks";
-import { UnauthorizedExcetion } from "helpers/exceptions";
+import { UnauthorizedException } from "helpers/exceptions";
 import { userRepository } from "modules/user";
 import { env } from "persistance";
 
@@ -57,7 +57,7 @@ export const authPlugin = fastifyPlugin<AuthOptions>(
       const user = await userRepository.getByEmail(req.user.email);
 
       if (!user)
-        throw new UnauthorizedExcetion(
+        throw new UnauthorizedException(
           "The user does not have permission to this system",
         );
 
