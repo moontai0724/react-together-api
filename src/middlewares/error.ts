@@ -1,6 +1,10 @@
-import { type FastifyInstance } from "fastify";
+import { type FastifyError, type FastifyInstance } from "fastify";
 import fastifyPlugin from "fastify-plugin";
-import { Exception, UnauthorizedException } from "helpers/exceptions";
+import {
+  BadRequestException,
+  Exception,
+  UnauthorizedException,
+} from "helpers/exceptions";
 
 type ErrorHandler = Parameters<FastifyInstance["setErrorHandler"]>[0];
 
@@ -15,6 +19,20 @@ function transformError(error: Error) {
     error.code.startsWith("FST_JWT_")
   ) {
     return new UnauthorizedException(error.message);
+  }
+
+  if (
+    "code" in error &&
+    error.code === "FST_ERR_VALIDATION" &&
+    "validation" in error
+  ) {
+    const { validationContext, validation = [] } = error as FastifyError;
+
+    const messages = validation.map(
+      ({ message }) => `\`${validationContext}\` ${message}`,
+    );
+
+    return new BadRequestException("Request validation failed", messages);
   }
 
   console.error("UNHANDLED ERROR: ", typeof error, error);
