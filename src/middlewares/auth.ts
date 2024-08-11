@@ -21,37 +21,47 @@ interface Token {
   payload: { iss: string };
 }
 
-export const authPlugin = fastifyPlugin(async (instance) => {
-  const getJwks = buildGetJwks({ providerDiscovery: true });
+interface AuthOptions {
+  ignorePatterns?: RegExp[];
+}
 
-  await instance.register(fastifyJwt, {
-    decode: { complete: true },
-    formatUser: (payload) => ({ email: payload.email }) as User,
-    verify: {
-      requiredClaims: ["aud", "iss"],
-      allowedAud: env.auth0.audience,
-      allowedIss: env.auth0.issuer,
-    },
-    secret: async (_req: FastifyRequest, token: TokenOrHeader) => {
-      const {
-        header: { kid, alg },
-        payload: { iss },
-      } = token as Token;
+export const authPlugin = fastifyPlugin<AuthOptions>(
+  async (instance, options) => {
+    const getJwks = buildGetJwks({ providerDiscovery: true });
 
-      return getJwks.getPublicKey({ kid, domain: iss, alg });
-    },
-  });
+    await instance.register(fastifyJwt, {
+      decode: { complete: true },
+      formatUser: (payload) => ({ email: payload.email }) as User,
+      verify: {
+        requiredClaims: ["aud", "iss"],
+        allowedAud: env.auth0.audience,
+        allowedIss: env.auth0.issuer,
+      },
+      secret: async (_req: FastifyRequest, token: TokenOrHeader) => {
+        const {
+          header: { kid, alg },
+          payload: { iss },
+        } = token as Token;
 
-  instance.addHook("onRequest", async (req) => {
-    await req.jwtVerify();
+        return getJwks.getPublicKey({ kid, domain: iss, alg });
+      },
+    });
 
-    const user = await userRepository.getByEmail(req.user.email);
+    instance.addHook("onRequest", async (req) => {
+      const { ignorePatterns } = options;
 
-    if (!user)
-      throw new UnauthorizedExcetion(
-        "The user does not have permission to this system",
-      );
+      if (ignorePatterns?.some((pattern) => pattern.test(req.url))) return;
 
-    req.user = user;
-  });
-});
+      await req.jwtVerify();
+
+      const user = await userRepository.getByEmail(req.user.email);
+
+      if (!user)
+        throw new UnauthorizedExcetion(
+          "The user does not have permission to this system",
+        );
+
+      req.user = user;
+    });
+  },
+);

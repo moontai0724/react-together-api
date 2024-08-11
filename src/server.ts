@@ -5,7 +5,9 @@ const fastify = await buildApp({
   logger: true,
 });
 
-await fastify.register(authPlugin);
+await fastify.register(authPlugin, {
+  ignorePatterns: [/^\/$/, /^\/documentation/],
+});
 
 fastify.listen({ port: 3000, host: "0.0.0.0" }, (err) => {
   if (err) {
