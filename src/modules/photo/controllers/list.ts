@@ -41,7 +41,7 @@ const listPhotoItemSchema = Type.Object({
 });
 
 export const listSchema = {
-  summary: "List photographers",
+  summary: "List photos",
   querystring: Type.Object({
     sort: Type.Optional(
       Type.Array(
