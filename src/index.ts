@@ -17,26 +17,26 @@ Object.defineProperty(BigInt.prototype, "toJSON", {
   },
 });
 
-export function buildApp(options: FastifyOptions = {}) {
+export async function buildApp(options: FastifyOptions = {}) {
   const app = Fastify(options as never);
 
-  app.register(errorHandlingPlugin);
+  await Promise.all([
+    app.register(errorHandlingPlugin),
+    app.register(fastifySwagger, openapiOptions),
+    app.register(fastifyCors, {
+      origin: "*",
+    }),
+    app.register(fastifyAutoload, {
+      dir: resolve(import.meta.dirname, "routes"),
+      autoHooks: true,
+      cascadeHooks: true,
+      dirNameRoutePrefix: true,
+      routeParams: true,
+    }),
+    app.register(fastifySwaggerUi),
+  ]);
 
-  app.register(fastifySwagger, openapiOptions);
-
-  app.register(fastifyCors, {
-    origin: "*",
-  });
-
-  app.register(fastifyAutoload, {
-    dir: resolve(import.meta.dirname, "routes"),
-    autoHooks: true,
-    cascadeHooks: true,
-    dirNameRoutePrefix: true,
-    routeParams: true,
-  });
-
-  app.register(fastifySwaggerUi);
+  console.log("Registered routes", app.printRoutes());
 
   return app;
 }
