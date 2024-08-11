@@ -10,7 +10,10 @@ export const photoReactionSchema = Type.Object({
   isRecommended: Type.Boolean({
     description: "Whether the user recommends this photo",
   }),
-  comment: Type.String({
-    description: "Comments for the photo of this user",
-  }),
+  comment: Type.Union([
+    Type.Null(),
+    Type.String({
+      description: "Comments for the photo of this user",
+    }),
+  ]),
 });
