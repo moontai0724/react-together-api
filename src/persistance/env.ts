@@ -8,6 +8,11 @@ export const database = {
   database: process.env.DB_DATABASE || "react-together",
 };
 
+export const auth0 = {
+  issuer: process.env.AUTH0_ISSUER || [],
+  audience: process.env.AUTH0_AUDIENCE || [],
+};
+
 export const file = {
   root: resolve(process.env.FILE_ROOT || "./photos"),
 };
