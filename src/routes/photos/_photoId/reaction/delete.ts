@@ -1,10 +1,9 @@
 import { Type } from "@sinclair/typebox";
-import { type FastifySchema } from "fastify";
+import type { FastifyPluginCallback, FastifySchema } from "fastify";
+import { photoReactionRepository } from "modules/photo-reaction";
 import type { TypedRouteHandler } from "types/fastify";
 
-import * as photoReactionRepository from "../repositories";
-
-export const deleteSchema = {
+const schema = {
   summary: "Delete own photo reaction",
   params: Type.Object({
     photoId: Type.Integer({ description: "photo id" }),
@@ -14,7 +13,7 @@ export const deleteSchema = {
   },
 } satisfies FastifySchema;
 
-const deleteReaction: TypedRouteHandler<typeof deleteSchema> = async (
+const controller: TypedRouteHandler<typeof schema> = async (
   request,
   response,
 ) => {
@@ -29,4 +28,8 @@ const deleteReaction: TypedRouteHandler<typeof deleteSchema> = async (
   response.status(204).send();
 };
 
-export { deleteReaction as delete };
+const router: FastifyPluginCallback = async (instance) => {
+  instance.delete("/", { schema }, controller);
+};
+
+export default router;

@@ -4,19 +4,26 @@ import type {
   FastifySchema,
   RouteHandler,
 } from "fastify";
-import { categoryController, categorySchema } from "modules/category";
+import {
+  photographerRepository,
+  photographerSchema,
+} from "modules/photographer";
 
 const schema: FastifySchema = {
-  summary: "List categories",
+  summary: "List photographers",
   response: {
     200: Type.Object({
-      data: Type.Array(categorySchema),
+      data: Type.Array(photographerSchema),
     }),
   },
 };
 
 const controller: RouteHandler = async () => ({
-  data: await categoryController.list(),
+  data: await photographerRepository.getAll({
+    orderBy: {
+      id: "asc",
+    },
+  }),
 });
 
 const router: FastifyPluginCallback = async (instance) => {

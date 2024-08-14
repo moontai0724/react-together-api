@@ -1,13 +1,14 @@
 import { Type } from "@sinclair/typebox";
-import { type FastifySchema } from "fastify";
+import type { FastifyPluginCallback, FastifySchema } from "fastify";
 import { NotFoundException, notFoundExceptionSchema } from "helpers/exceptions";
-import * as photoRepository from "modules/photo/repositories";
+import { photoRepository } from "modules/photo";
+import {
+  photoReactionRepository,
+  photoReactionSchema,
+} from "modules/photo-reaction";
 import type { TypedRouteHandler } from "types/fastify";
 
-import * as photoReactionRepository from "../repositories";
-import { photoReactionSchema } from "../schema";
-
-export const patchSchema = {
+const schema = {
   summary: "Upsert own photo reaction",
   params: Type.Object({
     photoId: Type.Integer({ description: "photo id" }),
@@ -22,7 +23,7 @@ export const patchSchema = {
   },
 } satisfies FastifySchema;
 
-export const patch: TypedRouteHandler<typeof patchSchema> = async (
+const controller: TypedRouteHandler<typeof schema> = async (
   request,
   response,
 ) => {
@@ -42,3 +43,9 @@ export const patch: TypedRouteHandler<typeof patchSchema> = async (
 
   response.status(201).send();
 };
+
+const router: FastifyPluginCallback = async (instance) => {
+  instance.patch("/", { schema }, controller);
+};
+
+export default router;
