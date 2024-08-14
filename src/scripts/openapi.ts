@@ -15,7 +15,7 @@ const optionsSchema = Type.Object({
 const docsPath = loadArguments(optionsSchema).path;
 
 (async () => {
-  const fastify = buildApp({
+  const fastify = await buildApp({
     logger: false,
   });
 
