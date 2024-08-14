@@ -16,7 +16,7 @@ export interface PhotoReactionTable {
   /**
    * Comments for the user
    */
-  comment?: string | null;
+  comment: string | null;
   createdAt: ColumnType<Date, string | undefined, never>;
   updatedAt: ColumnType<Date, string | undefined, string | undefined>;
 }

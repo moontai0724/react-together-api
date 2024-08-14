@@ -15,7 +15,7 @@ const schema = {
   }),
   body: Type.Object({
     isRecommended: Type.Boolean(),
-    comment: Type.Optional(photoReactionSchema.properties.comment),
+    comment: photoReactionSchema.properties.comment,
   }),
   response: {
     "201": {},

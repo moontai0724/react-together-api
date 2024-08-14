@@ -79,8 +79,10 @@ const controller: TypedRouteHandler<typeof schema> = async (request) => {
     page = 1,
     size: limit = 40,
   } = request.query;
+  const { id: userId } = request.user;
 
   const photos = await photoService.getAll({
+    userId,
     orderBy: sort?.map((order) => {
       const [givenSort, givenKey] = order.split(":");
       const direction = (

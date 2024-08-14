@@ -5,9 +5,12 @@ import {
   type FlickrPhotoSize,
   type Photo,
   type Photographer,
+  type PhotoReaction,
+  type User,
 } from "database";
 
 export interface GetAllOptions {
+  userId: User["id"];
   orderBy?: OrderBy<Pick<FlickrPhoto, "takenAt" | "updatedAt">>[];
   photographerIds?: Photo["photographerId"][];
   categoryIds?: Photo["categoryId"][];
@@ -33,8 +36,8 @@ export interface GetAllResult {
     comments: string[];
   };
   reaction: null | {
-    recommend: boolean;
-    comment: string;
+    recommend: PhotoReaction["isRecommended"];
+    comment: PhotoReaction["comment"];
   };
 }
 
@@ -43,7 +46,7 @@ function allPhotos({
   photographerIds,
   categoryIds,
   page,
-}: GetAllOptions = {}) {
+}: GetAllOptions) {
   let base = db
     .selectFrom("photos")
     .leftJoin("categories", "categories.id", "photos.categoryId")
@@ -112,10 +115,10 @@ async function getSizes(base: IPhotosQuery) {
   }, new Map<bigint, GetAllResult["flickrPhotoSizes"]>());
 }
 
-async function getReactions(base: IPhotosQuery) {
+async function getReactions(base: IPhotosQuery, loggedInUserId: User["id"]) {
   const reactions = await db
     .selectFrom(base.as("photos"))
-    .leftJoin("photoReactions", "photoReactions.photoId", "photos.id")
+    .innerJoin("photoReactions", "photoReactions.photoId", "photos.id")
     .select([
       "photos.id as photoId",
       "photoReactions.userId as userId",
@@ -125,7 +128,7 @@ async function getReactions(base: IPhotosQuery) {
     .execute();
 
   return reactions.reduce((acc, reaction) => {
-    const { photoId, isRecommended, comment } = reaction;
+    const { photoId, isRecommended, comment, userId } = reaction;
 
     if (!acc.has(photoId))
       acc.set(photoId, {
@@ -144,21 +147,35 @@ async function getReactions(base: IPhotosQuery) {
 
     if (comment) existing.reactions.comments.push(comment);
 
+    if (loggedInUserId === userId) {
+      existing.reaction = {
+        recommend: isRecommended,
+        comment,
+      };
+    }
+
     return acc;
   }, new Map<bigint, Pick<GetAllResult, "reactions" | "reaction">>());
 }
 
 export async function getAll({
+  userId,
   orderBy,
   photographerIds,
   categoryIds,
   page,
-}: GetAllOptions = {}): Promise<GetAllResult[]> {
-  const base = allPhotos({ orderBy, photographerIds, categoryIds, page });
+}: GetAllOptions): Promise<GetAllResult[]> {
+  const base = allPhotos({
+    userId,
+    orderBy,
+    photographerIds,
+    categoryIds,
+    page,
+  });
   const photos = await base.selectAll("photos").execute();
 
   const sizes = await getSizes(base);
-  const reactions = await getReactions(base);
+  const reactions = await getReactions(base, userId);
 
   return Array.from(
     photos
@@ -183,7 +200,10 @@ export async function getAll({
               takenAt: photo["flickrPhotos-takenAt"]!,
             },
             flickrPhotoSizes: [],
-            ...reactions.get(id)!,
+            ...(reactions.get(id) ?? {
+              reactions: { like: 0, dislike: 0, comments: [] },
+              reaction: null,
+            }),
           });
         }
 
