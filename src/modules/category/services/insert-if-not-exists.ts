@@ -1,6 +1,6 @@
 import { flickrApis } from "@moontai0724/flickr-sdk";
+import { flickrCredentialConfigs } from "configs";
 import { type Category, db } from "database";
-import { flickrCredentials } from "persistance/env";
 
 export async function insertIfNotExists(
   category: string,
@@ -19,7 +19,7 @@ export async function insertIfNotExists(
   )?.groups ?? { title: category };
 
   const { id: flickrPhotosetId } = await flickrApis.rest.photosets.create({
-    credentials: flickrCredentials,
+    credentials: flickrCredentialConfigs,
     title,
     description,
     primaryPhotoId,

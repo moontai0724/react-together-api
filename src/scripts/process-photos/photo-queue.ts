@@ -2,8 +2,8 @@ import { stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import { getHeapStatistics } from "node:v8";
 
+import { fileConfigs } from "configs";
 import type { Category, Photographer } from "database";
-import { env } from "persistance";
 
 export interface WaitingPhoto {
   category: Category;
@@ -29,7 +29,7 @@ let usedMemories = 0;
  */
 export async function isProcessable(photo: WaitingPhoto) {
   const filePath = resolve(
-    env.file.root,
+    fileConfigs.root,
     photo.category.label,
     photo.photographer.name,
     photo.fileName,

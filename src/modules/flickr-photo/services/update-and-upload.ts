@@ -1,9 +1,9 @@
 import { flickrApis } from "@moontai0724/flickr-sdk";
+import { flickrCredentialConfigs } from "configs";
+import { timeFormatConfigs } from "configs/config";
 import { type FlickrPhoto } from "database";
 import dayjs from "dayjs";
 import { flickrPhotoSizeRepository } from "modules/flickr-photo-size";
-import { timeFormat } from "persistance/config";
-import { flickrCredentials } from "persistance/env";
 
 import { getOne, update as updateRecord } from "../repositories";
 import { getOneByIntegrity } from "../repositories/get-one-by-integrity";
@@ -19,7 +19,7 @@ export interface UpdateAndUploadParams {
 
 async function replace(flickrId: FlickrPhoto["id"], photo: File) {
   const { photoId: replacedId } = await flickrApis.upload.replace({
-    credentials: flickrCredentials,
+    credentials: flickrCredentialConfigs,
     photoId: flickrId.toString(),
     photo,
   });
@@ -28,11 +28,11 @@ async function replace(flickrId: FlickrPhoto["id"], photo: File) {
 
   const [photoInfo, photoSizes] = await Promise.all([
     flickrApis.rest.photos.getInfo({
-      credentials: flickrCredentials,
+      credentials: flickrCredentialConfigs,
       photoId: replacedId,
     }),
     flickrApis.rest.photos.getSizes({
-      credentials: flickrCredentials,
+      credentials: flickrCredentialConfigs,
       photoId: replacedId,
     }),
   ]);
@@ -40,7 +40,7 @@ async function replace(flickrId: FlickrPhoto["id"], photo: File) {
   const id = BigInt(photoInfo.id);
   const url = photoInfo.urls.url.shift()!;
   const uploadedAt = dayjs(+photoInfo.dates.posted * 1000).format(
-    timeFormat.datetime,
+    timeFormatConfigs.datetime,
   );
   const takenAt = photoInfo.dates.taken;
 

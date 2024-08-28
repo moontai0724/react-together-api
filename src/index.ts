@@ -7,8 +7,8 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import Fastify from "fastify";
 import type { FastifyOptions } from "types/fastify";
 
+import { openapiOptions } from "./configs";
 import { errorHandlingPlugin } from "./middlewares";
-import { openapiOptions } from "./persistance";
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(BigInt.prototype, "toJSON", {

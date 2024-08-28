@@ -1,15 +1,15 @@
+import { databaseConfigs } from "configs";
 import { CamelCasePlugin, Kysely, MysqlDialect } from "kysely";
 import { createPool, type PoolOptions } from "mysql2";
-import { env } from "persistance";
 
 import type { Database } from "./schemas";
 
 const config: PoolOptions = {
-  host: env.database.host,
-  user: env.database.user,
-  password: env.database.password,
-  port: env.database.port,
-  database: env.database.database,
+  host: databaseConfigs.host,
+  user: databaseConfigs.user,
+  password: databaseConfigs.password,
+  port: databaseConfigs.port,
+  database: databaseConfigs.database,
   connectionLimit: 100,
 };
 

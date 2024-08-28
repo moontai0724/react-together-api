@@ -1,11 +1,11 @@
 import fastifyJwt, { type TokenOrHeader } from "@fastify/jwt";
+import { auth0Configs } from "configs";
 import { type User } from "database";
 import type { FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 import buildGetJwks from "get-jwks";
 import { UnauthorizedException } from "helpers/exceptions";
 import { userRepository } from "modules/user";
-import { env } from "persistance";
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
@@ -34,8 +34,8 @@ export const authPlugin = fastifyPlugin<AuthOptions>(
       formatUser: (payload) => ({ email: payload.email }) as User,
       verify: {
         requiredClaims: ["aud", "iss"],
-        allowedAud: env.auth0.audience,
-        allowedIss: env.auth0.issuer,
+        allowedAud: auth0Configs.audience,
+        allowedIss: auth0Configs.issuer,
       },
       secret: async (_req: FastifyRequest, token: TokenOrHeader) => {
         const {

@@ -1,5 +1,5 @@
+import { fileConfigs } from "configs";
 import { categoryService } from "modules/category";
-import { env } from "persistance";
 
 import { placeholderPhotoId } from "./const";
 import { getFolders } from "./get-folders";
@@ -17,7 +17,7 @@ async function createCategories(categories: string[]) {
  * @returns Categories
  */
 export async function loadCategories() {
-  const categories = await getFolders(env.file.root);
+  const categories = await getFolders(fileConfigs.root);
   const createdCategories = await createCategories(categories);
 
   return createdCategories;

@@ -1,9 +1,9 @@
 import { flickrApis } from "@moontai0724/flickr-sdk";
+import { flickrCredentialConfigs } from "configs";
+import { timeFormatConfigs } from "configs/config";
 import { type FlickrPhoto } from "database";
 import dayjs from "dayjs";
 import { flickrPhotoSizeRepository } from "modules/flickr-photo-size";
-import { timeFormat } from "persistance/config";
-import { flickrCredentials } from "persistance/env";
 
 import {
   create as createRecord,
@@ -21,7 +21,7 @@ export interface CreateAndUploadParams {
 
 async function upload(photo: File) {
   const uploadedId = await flickrApis.upload.upload({
-    credentials: flickrCredentials,
+    credentials: flickrCredentialConfigs,
     photo,
   });
 
@@ -29,11 +29,11 @@ async function upload(photo: File) {
 
   const [photoInfo, photoSizes] = await Promise.all([
     flickrApis.rest.photos.getInfo({
-      credentials: flickrCredentials,
+      credentials: flickrCredentialConfigs,
       photoId: uploadedId,
     }),
     flickrApis.rest.photos.getSizes({
-      credentials: flickrCredentials,
+      credentials: flickrCredentialConfigs,
       photoId: uploadedId,
     }),
   ]);
@@ -41,7 +41,7 @@ async function upload(photo: File) {
   const id = BigInt(photoInfo.id);
   const url = photoInfo.urls.url.shift()!;
   const uploadedAt = dayjs(+photoInfo.dates.posted * 1000).format(
-    timeFormat.datetime,
+    timeFormatConfigs.datetime,
   );
   const takenAt = photoInfo.dates.taken;
 

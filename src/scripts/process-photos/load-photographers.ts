@@ -1,8 +1,8 @@
 import { resolve } from "node:path";
 
+import { fileConfigs } from "configs";
 import type { Category } from "database";
 import { photographerService } from "modules/photographer";
-import { env } from "persistance";
 
 import { getFolders } from "./get-folders";
 
@@ -19,7 +19,7 @@ async function createPhotographers(photographers: string[]) {
  * @returns Photographers
  */
 export async function loadPhotographers(category: Category) {
-  const rootPath = resolve(env.file.root, category.label);
+  const rootPath = resolve(fileConfigs.root, category.label);
   const photographers = await getFolders(rootPath);
   const createdPhotographers = await createPhotographers(photographers);
 

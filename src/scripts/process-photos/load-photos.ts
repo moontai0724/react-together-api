@@ -2,9 +2,9 @@ import { type BinaryLike, createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
+import { fileConfigs } from "configs";
 import type { Category, Photographer } from "database";
 import { photoService } from "modules/photo";
-import { env } from "persistance";
 
 import { getFiles } from "./get-files";
 import { handlePhoto, type WaitingPhoto } from "./photo-queue";
@@ -12,7 +12,7 @@ import { handlePhoto, type WaitingPhoto } from "./photo-queue";
 async function readPhoto(info: WaitingPhoto) {
   const { category, photographer, fileName } = info;
   const filePath = resolve(
-    env.file.root,
+    fileConfigs.root,
     category.label,
     photographer.name,
     fileName,
@@ -63,7 +63,7 @@ export async function loadPhotos(
   photographer: Photographer,
 ) {
   console.log(`Loading photos for ${category.label}/${photographer.name}`);
-  const rootPath = resolve(env.file.root, category.label, photographer.name);
+  const rootPath = resolve(fileConfigs.root, category.label, photographer.name);
   const files = await getFiles(rootPath);
 
   const processings = files.map((fileName) =>

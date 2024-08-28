@@ -1,7 +1,7 @@
 import { flickrApis } from "@moontai0724/flickr-sdk";
+import { flickrCredentialConfigs } from "configs";
 import type { Category, FlickrPhoto, Photo } from "database";
 import { flickrPhotoService } from "modules/flickr-photo";
-import { flickrCredentials } from "persistance/env";
 
 import { getOneByPath, update } from "../repositories";
 import { create } from "./create";
@@ -61,7 +61,7 @@ async function createNew({
     throw new Error("Category has no flickr photoset id");
 
   await flickrApis.rest.photosets.addPhoto({
-    credentials: flickrCredentials,
+    credentials: flickrCredentialConfigs,
     photosetId: category.flickrPhotosetId.toString(),
     photoId: flickrPhotoId.toString(),
   });
