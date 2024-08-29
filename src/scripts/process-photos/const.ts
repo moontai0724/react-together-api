@@ -1,11 +1,11 @@
 import { flickrApis } from "@moontai0724/flickr-sdk";
-import { flickrCredentialConfigs } from "configs";
+import { flickrConfigs } from "configs";
 
 console.log("placeholder photo loading...");
 
 export const placeholderPhotoId = await flickrApis.upload
   .upload({
-    credentials: flickrCredentialConfigs,
+    credentials: flickrConfigs.credentials,
     photo: await (async () => {
       const onePx =
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjmHnz1X8AB8cDXJH2s1sAAAAASUVORK5CYII=";

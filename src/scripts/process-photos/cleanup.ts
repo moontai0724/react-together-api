@@ -1,5 +1,5 @@
 import { flickrApis } from "@moontai0724/flickr-sdk";
-import { flickrCredentialConfigs } from "configs";
+import { flickrConfigs } from "configs";
 import { categoryRepository } from "modules/category";
 import { flickrPhotoRepository } from "modules/flickr-photo";
 import { photographerRepository } from "modules/photographer";
@@ -13,7 +13,7 @@ export async function cleanup() {
     flickrPhotoRepository.deleteRedundant(),
     flickrApis.rest.photos
       .delete({
-        credentials: flickrCredentialConfigs,
+        credentials: flickrConfigs.credentials,
         photoId: placeholderPhotoId,
       })
       .catch((e) => e),

@@ -17,9 +17,14 @@ export const fileConfigs = {
   root: resolve(process.env.FILE_ROOT || "./photos"),
 };
 
-export const flickrCredentialConfigs = {
-  apiKey: process.env.FLICKR_API_KEY || "",
-  consumerSecret: process.env.FLICKR_API_SECRET || "",
-  oauthToken: process.env.FLICKR_OAUTH_TOKEN || "",
-  oauthTokenSecret: process.env.FLICKR_OAUTH_SECRET || "",
+export const flickrConfigs = {
+  defaults: {
+    isPublic: process.env.DEFAULT_IS_PUBLIC === "PUBLIC",
+  },
+  credentials: {
+    apiKey: process.env.FLICKR_API_KEY || "",
+    consumerSecret: process.env.FLICKR_API_SECRET || "",
+    oauthToken: process.env.FLICKR_OAUTH_TOKEN || "",
+    oauthTokenSecret: process.env.FLICKR_OAUTH_SECRET || "",
+  },
 };

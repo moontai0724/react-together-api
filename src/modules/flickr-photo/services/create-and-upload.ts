@@ -1,6 +1,5 @@
 import { flickrApis } from "@moontai0724/flickr-sdk";
-import { flickrCredentialConfigs } from "configs";
-import { timeFormatConfigs } from "configs/config";
+import { flickrConfigs, timeFormatConfigs } from "configs";
 import { type FlickrPhoto } from "database";
 import dayjs from "dayjs";
 import { flickrPhotoSizeRepository } from "modules/flickr-photo-size";
@@ -21,19 +20,20 @@ export interface CreateAndUploadParams {
 
 async function upload(photo: File) {
   const uploadedId = await flickrApis.upload.upload({
-    credentials: flickrCredentialConfigs,
+    credentials: flickrConfigs.credentials,
     photo,
+    isPublic: flickrConfigs.defaults.isPublic,
   });
 
   if (!uploadedId) throw new Error("Failed to upload photo");
 
   const [photoInfo, photoSizes] = await Promise.all([
     flickrApis.rest.photos.getInfo({
-      credentials: flickrCredentialConfigs,
+      credentials: flickrConfigs.credentials,
       photoId: uploadedId,
     }),
     flickrApis.rest.photos.getSizes({
-      credentials: flickrCredentialConfigs,
+      credentials: flickrConfigs.credentials,
       photoId: uploadedId,
     }),
   ]);
