@@ -1,7 +1,7 @@
 import { fileConfigs } from "configs";
+import { placeholderPhotoId } from "helpers/flickr/placeholder";
 import { categoryService } from "modules/category";
 
-import { placeholderPhotoId } from "./const";
 import { getFolders } from "./get-folders";
 
 async function createCategories(categories: string[]) {
