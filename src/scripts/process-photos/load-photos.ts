@@ -4,9 +4,9 @@ import { resolve } from "node:path";
 
 import { fileConfigs } from "configs";
 import type { Category, Photographer } from "database";
+import { getFiles } from "helpers/fs";
 import { photoService } from "modules/photo";
 
-import { getFiles } from "./get-files";
 import { handlePhoto, type WaitingPhoto } from "./photo-queue";
 
 async function readPhoto(info: WaitingPhoto) {
